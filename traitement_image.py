@@ -26,7 +26,8 @@ def make_info(img):
 					in_ligne = False
 		if curr > 0:
 			info_ligne += [curr]
-		if ( info_ligne != [] ): a_l += [info_ligne]
+		#  if ( info_ligne != [] ): a_l += [info_ligne]
+		a_l += [info_ligne]
 	for x in range(len(img[0])):
 		in_ligne = False
 		curr = 0
@@ -42,52 +43,39 @@ def make_info(img):
 					in_ligne = False
 		if curr > 0:
 			info_ligne += [curr]
-		if ( info_ligne != [] ): a_c += [info_ligne]
+		#  if ( info_ligne != [] ): a_c += [info_ligne]
+		a_c += [info_ligne]
 	return a_l, a_c
 
 
+def make_grid(path, w=30, h=30):
+	img = cv2.imread(path,cv2.IMREAD_GRAYSCALE)
+	output = cv2.resize(img, (w, h), interpolation=cv2.INTER_LINEAR)
+	gray_to_bw(output)
+	return output
 
+def make_empty(grid):
+	return np.zeros(grid.shape)
 
-	
+def compare_grille(A, B):
+	return np.array_equal(A,B)
 
-img = cv2.imread(sys.argv[1],cv2.IMREAD_GRAYSCALE)
+if __name__ == '__main__':
+	output = make_grid(sys.argv[1])
+	print(output.shape)
 
-#  cv2.imshow("base", img)
+	all_ligne, all_colonne = make_info(output)
+	for l in range(len(output)):
+		#  print(all_ligne[l],"#",list(output[l]))
+		print(list(output[l]))
+	#  for l in all_ligne:
+	#      print(l)
 
-
-height, width = img.shape[:2]
-w, h = (30, 30)
-output = cv2.resize(img, (w, h), interpolation=cv2.INTER_LINEAR)
-
-# Initialize output image
-#  output = cv2.resize(temp, (width, height), interpolation=cv2.INTER_NEAREST)
-
-gray_to_bw(output)
-
-#  cv2.imshow("noir et blanc", img_bw)
-
-cv2.imshow('pixel', output)
-k = cv2.waitKey(0)
-
-#  for l in output:
-#      for i in l:
-#          print(type(i))
-#          print(i == 255)
-
-print(output.shape)
-
-all_ligne, all_colonne = make_info(output)
-for l in range(len(output)):
-	#  print(all_ligne[l],"#",list(output[l]))
-	print(list(output[l]))
-#  for l in all_ligne:
-#      print(l)
-
-print()
-for block in range(max([len(a) for a in all_colonne])):
-	print("",", ".join([str(c[block]) if len(c) > block else "  " for c in all_colonne ]))
-#  print(all_colonne)
-#  print(max([len(a) for a in all_colonne]))
-#  block=0
-#  print([str(c[block]) if len(c) < block else "  " for c in all_colonne ])
-#  print([c[block] for c in all_colonne if len(c) > block])
+	print()
+	for block in range(max([len(a) for a in all_colonne])):
+		print("",", ".join([str(c[block]) if len(c) > block else "  " for c in all_colonne ]))
+	#  print(all_colonne)
+	#  print(max([len(a) for a in all_colonne]))
+	#  block=0
+	#  print([str(c[block]) if len(c) < block else "  " for c in all_colonne ])
+	#  print([c[block] for c in all_colonne if len(c) > block])
