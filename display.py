@@ -8,12 +8,13 @@ grid = traitement_image.make_grid("/mnt/c/Users/DPVR5455/OneDrive - orange.com/B
 regle_ligne, regle_colonne = traitement_image.make_info(grid)
 playgame = traitement_image.make_empty(grid)
 a_afficher = playgame
+
 #  print(type(playgame))
 #  print(playgame[0])
 #  print(playgame)
-for l in regle_ligne:
-	print("stdscr.addstr(",len(l),"+max_regle_taille_y, 0, "+" ".join([str(b) for b in l])+")")
-print(max([len(a) for a in regle_colonne]))
+#  for l in regle_ligne:
+#      print("stdscr.addstr(",len(l),"+max_regle_taille_y, 0, "+" ".join([str(b) for b in l])+")")
+#  print(max([len(a) for a in regle_colonne]))
 
 def make_affichage(stdscr, curr_x=0, curr_y=0):
 	max_regle_taille_y = max([len(" ".join([str(b) for b in a])) for a in regle_ligne])
@@ -29,10 +30,13 @@ def make_affichage(stdscr, curr_x=0, curr_y=0):
 	#  affiche la grille a afficher
 	for x in range(a_afficher.shape[0]):
 		for y in range(len(a_afficher)):
-			if (a_afficher[y][x] == 255):
-				s = "x "
+			if (a_afficher[y][x] == 0):
+				s = "██"
 			else:
-				s = ". "
+				if ((y+1) % 5 == 0):
+					s = "._"
+				else:
+					s = ".."
 			if (curr_x == x and curr_y == y):
 				stdscr.attron(curses.color_pair(1))
 				stdscr.addstr(y+max_regle_taille_x+1, (x*2)+max_regle_taille_y+1, s)
@@ -68,8 +72,8 @@ def main(stdscr):
 				a_afficher = grid
 			else:
 				a_afficher = playgame
-		elif key == ord('q'):
-			curses.endwin()
+		elif key == ord('q') or traitement_image.compare_grille(grid, playgame):
+			sys.exit(0)
 		elif key == ord(' '):
 			playgame[curr_y][curr_x] = 255 - playgame[curr_y][curr_x]
 		if curr_y < 0: curr_y = len(grid)-1

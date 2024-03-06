@@ -55,7 +55,7 @@ def make_grid(path, w=30, h=30):
 	return output
 
 def make_empty(grid):
-	return np.zeros(grid.shape)
+	return np.ones(grid.shape)*255
 
 def compare_grille(A, B):
 	return np.array_equal(A,B)
@@ -63,6 +63,10 @@ def compare_grille(A, B):
 if __name__ == '__main__':
 	output = make_grid(sys.argv[1])
 	print(output.shape)
+
+	cv2.imshow('Example - Show image in window',output)
+	cv2.waitKey(0) # waits until a key is pressed
+	cv2.destroyAllWindows() # destroys the window showing image
 
 	all_ligne, all_colonne = make_info(output)
 	for l in range(len(output)):
